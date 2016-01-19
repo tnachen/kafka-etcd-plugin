@@ -23,12 +23,15 @@ import java.util.concurrent.{ScheduledFuture, ScheduledThreadPoolExecutor, TimeU
 
 import org.apache.kafka.plugin.interface.{LeaderChangeListener, LeaderElection, ValueChangeListener}
 
+import mousio.etcd4j.EtcdClient
+
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 
 
 class EtcdLeaderElection(
   config: Config,
+  etcdClient: EtcdClient,
   resourceName: String = "kafka_controller") extends LeaderElection with LogUtils {
 
   override def service: String = resourceName

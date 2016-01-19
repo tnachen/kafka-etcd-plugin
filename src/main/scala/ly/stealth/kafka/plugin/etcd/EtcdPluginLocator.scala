@@ -17,11 +17,13 @@
 package ly.stealth.kafka.plugin.etcd
 
 import java.io.File
+import java.net.URI
 
 import ly.stealth.kafka.plugin.etcd.config.Config
 import ly.stealth.kafka.plugin.etcd.leader.election.EtcdLeaderElection
 import ly.stealth.kafka.plugin.etcd.listener.registry.EtcdListenerRegistry
 import org.apache.kafka.plugin.interface.{PluginLocator, ListenerRegistry, LeaderElection}
+import mousio.etcd4j.EtcdClient
 
 class EtcdPluginLocator extends PluginLocator {
 
@@ -30,9 +32,10 @@ class EtcdPluginLocator extends PluginLocator {
 
   override def startup(configFile: String): Unit = {
     val config = Config(new File(configFile))
+    val etcdClient = new EtcdClient(new URI(config.EtcdServerUrl))
 
     listenerRegistry = new EtcdListenerRegistry(config)
-    leaderElection = new EtcdLeaderElection(config)
+    leaderElection = new EtcdLeaderElection(config, etcdClient)
   }
 
   override def getLeaderElection = {

@@ -56,4 +56,5 @@ object Config extends LogUtils {
 
 
 class Config(props: Properties) {
+  val EtcdServerUrl = props.getProperty("plugin.etcd.server")
 }
